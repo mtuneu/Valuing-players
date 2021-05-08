@@ -17,6 +17,7 @@ def convert_to_actions(events):
     goal = (120, 40)
 
     for index, row in events.iterrows():
+        actions.loc[index, 'possession_team'] = row['possession_team']
         actions.loc[index, 'game_id'] = row['match']
         actions.loc[index, 'original_event_id'] = row['id']
         actions.loc[index, 'team_id'] = row['team']

@@ -34,7 +34,7 @@ def build_model(hp):
 
 def cnn(shots):
     #columns_features = ['start_distance', 'body_part', 'prev_start_distance', 'angle', 'situation', 'prev_type_id']
-    columns_features = ['distance', 'angle', 'prev_type_id', 'body_part']
+    columns_features = ['distance', 'angle', 'prev_type_id', 'body_part', 'situation']
     columns_target = 'outcome'
 
     X = shots[columns_features]
@@ -44,26 +44,15 @@ def cnn(shots):
     c = shots['statsbomb_xg']
     S_train, S_test, c_train, c_test = train_test_split(X, c, test_size=0.2)
 
-    model = keras.models.load_model('nn_model.h5')
+    model = keras.models.load_model('models/nn_model_v2.h5')
     
     history = model.fit(x_train, y_train, epochs=20)
     test_scores = model.evaluate(x_test, y_test, verbose=2)
-    print(model.summary())
-    print("Test accuracy: ", test_scores[1])
+    print(history)
+
+    return test_scores
 
 if __name__ == "__main__":
     shots = read_actions()
 
-    columns_features = ['distance', 'angle', 'prev_type_id', 'body_part']
-    columns_target = 'outcome'
-
-    X = shots[columns_features]
-    y = shots[columns_target]
-    x_train, x_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
-
-    tuner = RandomSearch(build_model,objective='val_accuracy', max_trials=5, executions_per_trial=3, directory='tuner', project_name='analysis_project_v2')
-    tuner.search(x_train,y_train, epochs=20, validation_data=(x_test, y_test))
-
-    model = tuner.get_best_models(num_models=1)
-
-    model[0].save('nn_model_v2.h5')
+    test_scores = cnn(shots)
