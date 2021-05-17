@@ -41,7 +41,7 @@ def convert_to_actions(events):
         actions.loc[index, 'type_id'] = row['type_id']
         actions.loc[index, 'type_name'] = " "
         actions.loc[index, 'body_part'] = 1
-        actions.loc[index, 'situation'] = "open play"
+        actions.loc[index, 'situation'] = 65
         actions.loc[index, 'distance'] = distance.euclidean((actions.loc[index, 'start_x'], actions.loc[index, 'start_y']), goal)
         actions.loc[index, 'vector_1'] = distance.euclidean((actions.loc[index, 'start_x'], actions.loc[index, 'start_y']), (120, 30))
         actions.loc[index, 'vector_2'] = distance.euclidean((actions.loc[index, 'start_x'], actions.loc[index, 'start_y']), (120, 50))
@@ -116,7 +116,7 @@ def convert_to_actions(events):
             actions.loc[index, 'type_name'] = 'own_goal'
             actions.loc[index, 'outcome'] = 0
         actions.loc[index, 'prev_type_id'] = actions.loc[index - 1, 'type_id'] if index > 0 else 30
-        actions.loc[index, 'possession_team'] = row['possession_team'].get('id')
+        actions.loc[index, 'possession_team'] = row['possession_team']
 
     actions = actions.reset_index()
     actions = actions.drop(columns=["index", 'vector_1', 'vector_2', 'vector_3', 'start_x', 'start_y', 'end_x', 'end_y'])

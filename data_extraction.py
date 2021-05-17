@@ -52,8 +52,8 @@ def extract_shots():
 
 
 if __name__ == '__main__':
-    extract_shots()
-    #extract_all_actions()
+    #extract_shots()
+    extract_all_actions()
     
 
 

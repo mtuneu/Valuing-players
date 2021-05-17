@@ -3,6 +3,7 @@ import extract_events
 import numpy as np
 import os
 os.environ['CUDA_VISIBLE_DEVICES'] = '0'
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 from os import listdir
 from os.path import isfile, join
 import matplotlib.pyplot as plt
@@ -42,13 +43,12 @@ def cnn(shots):
     x_train, x_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
 
     c = shots['statsbomb_xg']
-    S_train, S_test, c_train, c_test = train_test_split(X, c, test_size=0.2)
 
     model = keras.models.load_model('models/nn_model_v2.h5')
     
     history = model.fit(x_train, y_train, epochs=20)
     test_scores = model.evaluate(x_test, y_test, verbose=2)
-    print(history)
+
 
     return test_scores
 
