@@ -23,6 +23,8 @@ def get_shots(events_df):
     for index, row in shots_df.iterrows():
         try:
             if shots_df.loc[index, 'type_id'] == 16:
+                shots_df.loc[index, 'start_x'] = row.location[0]
+                shots_df.loc[index, 'start_y'] = row.location[1]
                 shots_df.loc[index, 'prev_type_id'] = shots_df.loc[index - 1, 'type_id']
                 shots_df.loc[index, 'outcome'] = 1 if shots_df.loc[index, 'shot']['outcome']['id'] == 97 else 0
                 if 'statsbomb_xg' in shots_df.loc[index, 'shot']:
@@ -50,7 +52,6 @@ def get_shots(events_df):
                         shots_df.loc[index, 'type_id'] = 200
         except:
             print(shots_df.loc[index, 'type_id'])
-
     shots_df = shots_df.dropna(how='any', subset=['prev_type_id'])
     shots_df = shots_df[['type_id', 'prev_type_id', 'situation', 'distance', 'body_part', 'angle', 'statsbomb_xg','outcome', 'start_x', 'start_y']].copy()
     
