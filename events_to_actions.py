@@ -119,7 +119,7 @@ def convert_to_actions(events):
         actions.loc[index, 'possession_team'] = row['possession_team']
 
     actions = actions.reset_index()
-    actions = actions.drop(columns=["index", 'vector_1', 'vector_2', 'vector_3', 'start_x', 'start_y', 'end_x', 'end_y'])
+    actions = actions.drop(columns=["index", 'vector_1', 'vector_2', 'vector_3','end_x', 'end_y'])
 
     return actions
 
