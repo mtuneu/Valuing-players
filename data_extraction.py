@@ -3,7 +3,6 @@ import events_to_actions as to_actions
 import shots
 from expected_goals import logistic_expected_goals
 import pandas as pd
-import pickle
 
 def extract_all_actions():
     """

@@ -13,7 +13,6 @@ def load_match_events(match_id):
 
     return match_df
 
-
 def calculate_scoring_probabilities(match_df, team_id,xg_model):
     columns = ['distance', 'angle', 'prev_type_id', 'body_part', 'situation']
     o_goal = (0, 40)
@@ -96,15 +95,21 @@ def get_sequence(match_df):
     
     return match_df
 
+def get_total_value(values_df):
+
+    values_df['total_value'] = values_df['attacking_value'] + values_df['deffensive_value']
+
+    return values_df
+
 
 
 
 if __name__ == '__main__':
+    match_id = 7430
 
     xg_model = keras.models.load_model('models/nn_model_v2.h5')
 
-
-    match_df = load_match_events(7430)
+    match_df = load_match_events(match_id)
 
     team_id = match_df.loc[0, 'team_id']
 
@@ -116,5 +121,8 @@ if __name__ == '__main__':
 
     simple_values_df = get_sequence(value_df)
 
-    print(simple_values_df)
+    values_df = get_total_value(simple_values_df)
+
+    values_df.to_pickle('match_values/'+str(match_id)+'.pkl')
+
     
