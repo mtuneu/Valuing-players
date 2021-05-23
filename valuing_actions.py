@@ -62,7 +62,7 @@ def calculate_conceding_probabilities(match_df, team_id, xg_model):
 
 
 
-def get_sequence(match_df):
+def get_sequence(match_df, team_id):
 
     match_df['attacking_value'] = 0.0
     match_df['deffensive_value'] = 0.0
@@ -71,25 +71,49 @@ def get_sequence(match_df):
         try:
             if (index < (len(match_df.index) - 2)):
                 if(row['type_id'] == 16 and row['outcome'] == 1):
-                    match_df.at[index, 'attacking_value'] = 1 - match_df.loc[index, 'score_prob']
-                    match_df.at[index, 'deffensive_value'] = 1 - match_df.at[index, 'concede_prob']
+                    if row['team_id'] == team_id:
+                        match_df.at[index, 'attacking_value'] = 1 - match_df.loc[index, 'score_prob']
+                        match_df.at[index, 'deffensive_value'] = 0
+                    else:
+                        match_df.at[index, 'attacking_value'] = 1 - match_df.loc[index, 'concede_prob']
+                        match_df.at[index, 'deffensive_value'] = 0
                 else:
-                    match_df.at[index, 'attacking_value'] = (match_df.at[index, 'score_prob'] + match_df.at[index + 1, 'score_prob'] + match_df.at[index + 2, 'score_prob']) / 3
-                    match_df.at[index, 'deffensive_value'] = (match_df.at[index, 'concede_prob'] + match_df.at[index + 1, 'concede_prob'] + match_df.at[index + 2, 'concede_prob']) / 3
+                    if row['team_id'] == team_id:
+                        match_df.at[index, 'attacking_value'] = (match_df.at[index, 'score_prob'] + match_df.at[index + 1, 'score_prob'] + match_df.at[index + 2, 'score_prob']) / 3
+                        match_df.at[index, 'deffensive_value'] = (match_df.at[index, 'concede_prob'] + match_df.at[index + 1, 'concede_prob'] + match_df.at[index + 2, 'concede_prob']) / 3
+                    else:
+                        match_df.at[index, 'deffensive_value'] = (match_df.at[index, 'score_prob'] + match_df.at[index + 1, 'score_prob'] + match_df.at[index + 2, 'score_prob']) / 3
+                        match_df.at[index, 'attacking_value'] = (match_df.at[index, 'concede_prob'] + match_df.at[index + 1, 'concede_prob'] + match_df.at[index + 2, 'concede_prob']) / 3
             elif (index < len(match_df.index) -1):
                 if(row['type_id'] == 16 and row['outcome'] == 1):
-                    match_df.at[index, 'attacking_value'] = 1 - match_df.loc[index, 'score_prob']
-                    match_df.at[index, 'deffensive_value'] = 1 - match_df.loc[index, 'concede_prob']
+                    if row['team_id'] == team_id:
+                        match_df.at[index, 'attacking_value'] = 1 - match_df.loc[index, 'score_prob']
+                        match_df.at[index, 'deffensive_value'] = 0
+                    else:
+                        match_df.at[index, 'attacking_value'] = 1 - match_df.loc[index, 'concede_prob']
+                        match_df.at[index, 'deffensive_value'] = 0
                 else:
-                    match_df.at[index, 'attacking_value'] = (match_df.at[index, 'score_prob'] + match_df.at[index + 1, 'score_prob']) / 2
-                    match_df.at[index, 'deffensive_value'] = (match_df.at[index, 'concede_prob'] + match_df.at[index + 1, 'concede_prob']) / 2
+                    if row['team_id'] == team_id:
+                        match_df.at[index, 'attacking_value'] = (match_df.at[index, 'score_prob'] + match_df.at[index + 1, 'score_prob']) / 2
+                        match_df.at[index, 'deffensive_value'] = (match_df.at[index, 'concede_prob'] + match_df.at[index + 1, 'concede_prob']) / 2
+                    else:
+                        match_df.at[index, 'deffensive_value'] = (match_df.at[index, 'score_prob'] + match_df.at[index + 1, 'score_prob']) / 2
+                        match_df.at[index, 'attacking_value'] = (match_df.at[index, 'concede_prob'] + match_df.at[index + 1, 'concede_prob']) / 2
             else:
                 if(row['type_id'] == 16 and row['outcome'] == 1):
-                    match_df.at[index, 'attacking_value'] = 1 - match_df.loc[index, 'score_prob']
-                    match_df.at[index, 'deffensive_value'] = 1 - match_df.loc[index, 'concede_prob']
+                    if row['team_id'] == team_id:
+                        match_df.at[index, 'attacking_value'] = 1 - match_df.loc[index, 'score_prob']
+                        match_df.at[index, 'deffensive_value'] = 0
+                    else:
+                        match_df.at[index, 'attacking_value'] = 1 - match_df.loc[index, 'concede_prob']
+                        match_df.at[index, 'deffensive_value'] = 0
                 else:
-                    match_df.at[index, 'attacking_value'] = match_df.at[index, 'score_prob']
-                    match_df.at[index, 'deffensive_value'] = match_df.at[index, 'concede_prob']
+                    if row['team_id'] == team_id:
+                        match_df.at[index, 'attacking_value'] = match_df.at[index, 'score_prob']
+                        match_df.at[index, 'deffensive_value'] = match_df.at[index, 'concede_prob']
+                    else:
+                        match_df.at[index, 'deffensive_value'] = match_df.at[index, 'score_prob']
+                        match_df.at[index, 'attacking_value'] = match_df.at[index, 'concede_prob']
         except:
             print("ERROR")
     
@@ -123,7 +147,7 @@ def get_all_values(xg_model):
 
             value_df = score_df.merge(concede_df)
 
-            simple_values_df = get_sequence(value_df)
+            simple_values_df = get_sequence(value_df, team_id)
 
             values_df = get_total_value(simple_values_df)
 
@@ -155,8 +179,8 @@ if __name__ == '__main__':
 
     match_id = 7430
 
-    get_one_match_values(xg_model, match_id)
+    #get_one_match_values(xg_model, match_id)
 
-    #get_all_values(xg_model)
+    get_all_values(xg_model)
 
     

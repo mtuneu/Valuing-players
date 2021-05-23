@@ -42,12 +42,12 @@ def get_rating(players_values, players_df):
 
     players_values['rating'] = (90 / players_values['minutes_played']) * players_values['value'] 
 
-    print(players_values)
+    return players_values
 
 
 if __name__ == '__main__':
 
-    match_id = 7430
+    match_id = 15998
 
     players = ei.get_players(match_id)
     events_df = ei.get_simple_events(match_id)
@@ -58,7 +58,7 @@ if __name__ == '__main__':
     players_values = all_players_value(players_df, values_df)
 
 
-    get_rating(players_values, players_df)
+    print(get_rating(players_values, players_df))
 
     
 
