@@ -2,7 +2,6 @@ from extract_events import get_competitions, get_games
 import extract_information as ei
 import warnings
 import pandas as pd
-from IPython.display import display
 
 warnings.simplefilter(action='ignore', category=pd.errors.PerformanceWarning)
 
@@ -22,7 +21,6 @@ def player_value(player_id, values_df):
 
 
 def all_players_value(players_df,values_df):
-
     player_ids = players_df['player_id'].to_list()
     
     player_values = []
@@ -46,10 +44,10 @@ def get_rating(players_values, players_df):
 
     return players_values
 
-def get_all_players_rating(competitions='all', gender='female'):
+def get_all_players_rating(competitions='all', gender='male'):
     competitions_df = get_competitions()
 
-    path = 'all'
+    path = 'ratings/all'
 
     if competitions != 'all':
         if type(competitions) == str:
@@ -80,7 +78,7 @@ def get_all_players_rating(competitions='all', gender='female'):
 
             players_values = all_players_value(players_df, values_df)
 
-            players_df = players_df[['player_id', 'player_name','minutes_played']]
+            players_df = players_df[['player_id', 'player_name','minutes_played', 'player_position']]
             players_values = players_values.merge(players_df, on='player_id')
 
             for i, r in players_values.iterrows():
@@ -95,31 +93,29 @@ def get_all_players_rating(competitions='all', gender='female'):
                 else:
                     all_players_df = all_players_df.append(r)
                 all_players_df = all_players_df.reset_index(drop=True)
-                    
     all_players_df['rating'] = (90 / all_players_df['minutes_played']) * all_players_df['value']
-
         
     all_players_df.to_pickle(str(path)+'_players_rating.pkl')
-
-    print(all_players_df)
     
 
     return all_players_df
 
 
-def get_best_ratings(all_players_df):
+def get_best_ratings(all_players_df, n_players=10, minutes_played=900):
 
-    mask = all_players_df['minutes_played'] > 900
+    mask = all_players_df['minutes_played'] > minutes_played
+    mask2 = all_players_df['player_position'] != 'Goalkeeper'
 
-    all_players_df = all_players_df[mask].reset_index(drop=True)
+    all_players_df = all_players_df[mask]
+    all_players_df = all_players_df[mask2].reset_index(drop=True)
 
     all_players_df = all_players_df.sort_values('rating', ascending=False)
 
-    print(all_players_df.head(10))
+    #print(all_players_df.head(n_players))
 
+    pd.set_option('display.max_rows', None)
 
-
-
+    print(all_players_df)
     
 
 if __name__ == '__main__':
@@ -129,15 +125,16 @@ if __name__ == '__main__':
     players = ei.get_players(match_id)
     events_df = ei.get_simple_events(match_id)
     players_df = ei.player_games(events_df, players)
-
+    print(players_df)
     values_df = get_values(match_id)
 
     players_values = all_players_value(players_df, values_df)
 
     print(get_rating(players_values, players_df))"""
-    all_players_df = get_all_players_rating()
+
+    #all_players_df = get_all_players_rating()
     
-    #all_players_df = pd.read_pickle('all_male_players_rating.pkl')
+    all_players_df = pd.read_pickle('ratings/all_male_players_rating.pkl')
     get_best_ratings(all_players_df)
 
 

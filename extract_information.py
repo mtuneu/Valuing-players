@@ -40,11 +40,11 @@ def player_games(events_df, first_players_df):
         for key, value in row['tactics'].items():
             if type(value) == list:
                 for p in value:
-                    player = {'player_id': p['player']['id'], 'player_name': p['player']['name'], 'minutes_played': max_minutes, 'is_starter': 1 if p['position'] else 0}
+                    player = {'player_id': p['player']['id'], 'player_name': p['player']['name'], 'minutes_played': max_minutes, 'is_starter': 1 if p['position'] else 0, 'player_position': p['position'].get('name')}
                     players.append(player)
 
     for index, row in events_df[events_df['type'] == {'id': 19, 'name': 'Substitution'}].iterrows():
-        replacement = {'player_id': row['substitution']['replacement']['id'], 'player_name': row['substitution']['replacement']['name'], 'minutes_played': max_minutes - row['minute']}
+        replacement = {'player_id': row['substitution']['replacement']['id'], 'player_name': row['substitution']['replacement']['name'], 'minutes_played': max_minutes - row['minute'], 'player_position': row['position'].get('name')}
         players.append(replacement)
 
     
