@@ -114,6 +114,3 @@ dmypy.json
 .pyre/
 
 data/
-dataframes/
-tuner/
-match_values/
