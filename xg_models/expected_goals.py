@@ -1,18 +1,12 @@
 import pandas as pd
-import numpy as np
-from os import listdir
-from os.path import isfile, join
-from scipy.spatial import distance
-import matplotlib.pyplot as plt
-import pickle
 from joblib import dump, load
 from sklearn.model_selection import train_test_split, RepeatedStratifiedKFold, GridSearchCV
 from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import roc_auc_score, classification_report, average_precision_score, f1_score, precision_score, recall_score, plot_roc_curve,r2_score, mean_squared_error
+from sklearn.metrics import roc_auc_score, r2_score, mean_squared_error
 
 
 def read_actions():
-    shots = pd.read_pickle('total_shots.pkl')
+    shots = pd.read_pickle('./dataframes/total_shots.pkl')
     
     return shots
 

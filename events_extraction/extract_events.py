@@ -13,7 +13,7 @@ def get_competitions():
         'competition_gender', and 'season_name'
     ]
     """
-    with open('data/competitions.json', encoding='utf-8') as json_file:
+    with open('./data/competitions.json', encoding='utf-8') as json_file:
         data = json.load(json_file)
 
     competition_df = pd.DataFrame(data).drop(
@@ -32,7 +32,7 @@ def get_games(competition_id, season_id):
         'stadium_id', 'stadium_name', 'stadium_extra', 'referee_id'
     ]
     """
-    with open('data/matches/'+str(competition_id)+'/'+str(season_id)+'.json',
+    with open('./data/matches/'+str(competition_id)+'/'+str(season_id)+'.json',
               encoding='utf-8') as json_file:
         data = json.load(json_file)
 
@@ -48,7 +48,7 @@ def get_teams(match_id):
     Returns a list with the id of the teams that are playing an specific match.
     """
 
-    with open('data/lineups/' + str(match_id) + '.json', encoding='utf-8') as json_file:
+    with open('./data/lineups/' + str(match_id) + '.json', encoding='utf-8') as json_file:
         data = json.load(json_file)
 
     lineups_df = pd.DataFrame(data)
@@ -77,7 +77,7 @@ def get_events(match_id):
 
     """
 
-    with open('data/events/' + str(match_id) + '.json', encoding='utf-8') as json_file:
+    with open('./data/events/' + str(match_id) + '.json', encoding='utf-8') as json_file:
         data = json.load(json_file)
     events_df = pd.DataFrame(data)
     try:

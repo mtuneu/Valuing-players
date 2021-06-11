@@ -1,19 +1,18 @@
 import pandas as pd
 import warnings
 import json
-from extract_events import get_competitions, get_games, get_teams
 
 warnings.simplefilter(action='ignore', category=pd.errors.PerformanceWarning)
 
 def get_simple_events(match_id):
-    with open('data/events/' + str(match_id) + '.json', encoding='utf-8') as json_file:
+    with open('./data/events/' + str(match_id) + '.json', encoding='utf-8') as json_file:
         data = json.load(json_file)
     events_df = pd.DataFrame(data)
 
     return events_df
 
 def starting_lineup(match_id):
-    with open('data/lineups/'+str(match_id)+'.json', encoding='utf-8') as json_file:
+    with open('./data/lineups/'+str(match_id)+'.json', encoding='utf-8') as json_file:
         data = json.load(json_file)
     
     lineup_df = pd.DataFrame(data)
@@ -59,9 +58,3 @@ def player_games(events_df, first_players_df):
     players_df = players_df.rename(columns={'player_name_x' : 'player_name'})
 
     return players_df
-        
-    
-if __name__ == "__main__":
-    players = get_players(15998)
-    events_df = get_simple_events(15998)
-    players_df = player_games(events_df, players)

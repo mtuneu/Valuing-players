@@ -1,7 +1,7 @@
-import extract_events
-import events_to_actions as to_actions
-import shots
-from expected_goals import logistic_expected_goals
+from events_extraction import extract_events
+from events_to_actions import events_to_actions
+import argparse
+from events_to_actions import shots
 import pandas as pd
 
 def extract_all_actions():
@@ -47,12 +47,22 @@ def extract_shots():
             frames = [all_shots, shots_df]
             all_shots = pd.concat(frames, ignore_index=True)
         print("DONE:", competition_id)
-    all_shots.to_pickle('total_shots.pkl')
+    all_shots.to_pickle('dataframes/total_shots.pkl')
 
 
 if __name__ == '__main__':
-    #extract_shots()
-    extract_all_actions()
+    my_parser = argparse.ArgumentParser(description='All events or shots')
+    my_parser.add_argument('Type', metavar='type', type=str, help='all events or shots')
+    args = my_parser.parse_args()
+
+    types = args.Type
+
+    if types == 'shots':
+        print("Doing shots")
+        extract_shots()
+    else:
+        print("Doing all events")
+        extract_all_actions()
     
 
 

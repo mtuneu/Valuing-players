@@ -1,15 +1,8 @@
 from extract_events import get_competitions, get_games
-import os
-os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 import pandas as pd
-from tensorflow import keras
 from scipy.spatial import distance
 from math import acos, degrees
 
-def load_match_events(match_id):
-    match_df = pd.read_pickle('dataframes/'+str(match_id)+'.pkl')
-
-    return match_df
 
 def calculate_scoring_probabilities(match_df, team_id,xg_model):
 
@@ -77,57 +70,82 @@ def get_sequence(match_df, team_id):
 
     match_df['attacking_value'] = 0.0
     match_df['deffensive_value'] = 0.0
-
+    team1_xG = 0
+    team2_xG = 0
+    team_1_goals = 0
+    team_2_goals = 0
     for index, row in match_df.iterrows():
         try:
             if (index < (len(match_df.index) - 2)):
                 if(row['type_id'] == 16 and row['outcome'] == 1):
                     if row['team_id'] == team_id:
+                        team_1_goals+=1
                         match_df.at[index, 'attacking_value'] = 1 - match_df.loc[index, 'score_prob']
                         match_df.at[index, 'deffensive_value'] = 1 - match_df.loc[index, 'concede_prob']
                     else:
+                        team_2_goals+=1
                         match_df.at[index, 'attacking_value'] = 1 - match_df.loc[index, 'concede_prob']
                         match_df.at[index, 'deffensive_value'] = 1 - match_df.loc[index, 'score_prob']
-                else:
+                else:    
                     if row['team_id'] == team_id:
+                        if row['type_id'] == 16:
+                            team2_xG = match_df.loc[index, 'score_prob'] + team1_xG
                         match_df.at[index, 'attacking_value'] = ((return_score_probabilites(team_id, match_df.loc[index + 1]) - match_df.at[index , 'score_prob']) + (return_score_probabilites(team_id, match_df.loc[index+2]) - return_score_probabilites(team_id, match_df.loc[index + 1]))) / 2
                         match_df.at[index, 'deffensive_value'] = - (((return_concede_probabilites(team_id, match_df.loc[index + 1]) - match_df.at[index , 'concede_prob']) + (return_concede_probabilites(team_id, match_df.loc[index + 2]) - return_concede_probabilites(team_id, match_df.loc[index + 1]))) / 2)
                     else:
+                        if row['type_id'] == 16:
+                            team2_xG =match_df.loc[index, 'concede_prob'] + team2_xG
                         match_df.at[index, 'deffensive_value'] = - (((return_score_probabilites(team_id, match_df.loc[index + 1]) - match_df.at[index , 'score_prob']) + (return_score_probabilites(team_id, match_df.loc[index+2]) - return_score_probabilites(team_id, match_df.loc[index + 1]))) / 2)
                         match_df.at[index, 'attacking_value'] = ((return_concede_probabilites(team_id, match_df.loc[index + 1]) - match_df.at[index , 'concede_prob']) + (return_concede_probabilites(team_id, match_df.loc[index + 2]) - return_concede_probabilites(team_id, match_df.loc[index + 1]))) / 2
             elif (index < len(match_df.index) -1):
                 if(row['type_id'] == 16 and row['outcome'] == 1):
                     if row['team_id'] == team_id:
+                        team_1_goals+=1
                         match_df.at[index, 'attacking_value'] = 1 - match_df.loc[index, 'score_prob']
                         match_df.at[index, 'deffensive_value'] = 1 - match_df.loc[index, 'concede_prob']
                     else:
+                        team_2_goals+=1
                         match_df.at[index, 'attacking_value'] = 1 - match_df.loc[index, 'concede_prob']
                         match_df.at[index, 'deffensive_value'] = 1 - match_df.loc[index, 'score_prob']
                 else:
                     if row['team_id'] == team_id:
+                        if row['type_id'] == 16:
+                            team1_xG = match_df.loc[index, 'concede_prob'] + team1_xG
                         match_df.at[index, 'attacking_value'] = (return_score_probabilites(team_id, match_df.loc[index + 1]) - match_df.at[index, 'score_prob'])
                         match_df.at[index, 'deffensive_value'] = -(match_df.at[index + 1, 'concede_prob'] - match_df.at[index, 'concede_prob'])
                     else:
+                        if row['type_id'] == 16:
+                            team2_xG = match_df.loc[index, 'concede_prob'] + team2_xG
                         match_df.at[index, 'deffensive_value'] = - (return_score_probabilites(team_id, match_df.loc[index + 1]) - match_df.at[index, 'score_prob'])
                         match_df.at[index, 'attacking_value'] = (return_concede_probabilites(team_id, match_df.loc[index + 1]) - match_df.at[index, 'concede_prob'])
             else:
                 if(row['type_id'] == 16 and row['outcome'] == 1):
                     if row['team_id'] == team_id:
+                        team_1_goals+=1
                         match_df.at[index, 'attacking_value'] = 1 - match_df.loc[index, 'score_prob']
                         match_df.at[index, 'deffensive_value'] = 1 - match_df.loc[index, 'concede_prob']
                     else:
+                        team_2_goals+=1
                         match_df.at[index, 'attacking_value'] = 1 - match_df.loc[index, 'concede_prob']
                         match_df.at[index, 'deffensive_value'] = 1 - match_df.loc[index, 'score_prob']
                 else:
                     if row['team_id'] == team_id:
+                        if row['type_id'] == 16:
+                            team1_xG = match_df.at[index, 'concede_prob'] + team1_xG
                         match_df.at[index, 'attacking_value'] = match_df.at[index, 'score_prob']
                         match_df.at[index, 'deffensive_value'] = - match_df.at[index, 'concede_prob']
                     else:
+                        if row['type_id'] == 16:
+                            team2_xG = match_df.at[index, 'concede_prob'] + team2_xG
                         match_df.at[index, 'deffensive_value'] = - match_df.at[index, 'score_prob']
                         match_df.at[index, 'attacking_value'] = match_df.at[index, 'concede_prob']
         except:
             print("ERROR")
-    
+
+        match_df['team1_xG'] = team1_xG
+        match_df['team2_xG'] = team2_xG
+        match_df['team1_goals'] = team_1_goals
+        match_df['team2_goals'] = team_2_goals
     return match_df
 
 def get_total_value(values_df):
@@ -136,64 +154,5 @@ def get_total_value(values_df):
 
     return values_df
 
-def get_all_values(xg_model):
-    competitions_df = get_competitions()
-
-    for index, row in competitions_df.iterrows():
-        competition_id = row['competition_id']
-        season_id = row['season_id']
-
-        games_df = get_games(competition_id, season_id)
-
-        for _index, _row in games_df.iterrows():
-            match_id = _row['match_id']
-
-            match_df = load_match_events(match_id)
-
-            team_id = match_df.loc[0, 'team_id']
-
-            score_df = calculate_scoring_probabilities(match_df, team_id, xg_model)
-
-            concede_df = calculate_conceding_probabilities(match_df, team_id, xg_model)
-
-            value_df = score_df.merge(concede_df)
-
-            simple_values_df = get_sequence(value_df, team_id)
-
-            values_df = get_total_value(simple_values_df)
-
-            values_df.to_pickle('match_values/'+str(match_id)+'.pkl')
-        
-        print("DONE")
-
-def get_one_match_values(xg_model, match_id):
-    match_df = load_match_events(match_id)
-
-    team_id = match_df.loc[0, 'team_id']
-
-    score_df = calculate_scoring_probabilities(match_df, team_id, xg_model)
-
-    concede_df = calculate_conceding_probabilities(match_df, team_id, xg_model)
-
-    value_df = score_df.merge(concede_df)
-
-    simple_values_df = get_sequence(value_df, team_id)
-
-    values_df = get_total_value(simple_values_df)
-
-    values_df.to_pickle('match_values/'+str(match_id)+'.pkl')
-
-    return values_df
-
-
-if __name__ == '__main__':
-
-    xg_model = keras.models.load_model('models/nn_model_v2.h5')
-
-    #match_id = 15998
-
-    #get_one_match_values(xg_model, match_id)
-
-    get_all_values(xg_model)
 
     

@@ -8,7 +8,6 @@ import sklearn.metrics as metrics
 import matplotlib.pyplot as plt
 from joblib import dump, load
 from tensorflow import keras
-import numpy as np
 import warnings
 import matplotlib.pyplot as plt
 
@@ -156,10 +155,10 @@ def plot_roc(file_path_1, file_path_2, shots):
 
     x_train, x_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
 
-    print(y_test)
+
     log_predicted = log_model.decision_function(x_test)
     nn_predicted = nn_model.predict(x_test)
-    print(log_predicted)
+
     log_fpr, log_tpr, threshold = metrics.roc_curve(y_test, log_predicted)
     auc_log = metrics.auc(log_fpr, log_tpr)
 
@@ -176,7 +175,11 @@ def plot_roc(file_path_1, file_path_2, shots):
 
 if __name__ == "__main__":
     shots = read_actions()
+
     #compare_classes(LOGISTIC_PATH, NN_PATH, shots)
-    compare_probabilities(LOGISTIC_PATH, NN_PATH, shots)
+    #compare_probabilities(LOGISTIC_PATH, NN_PATH, shots)
     #plot_roc(LOGISTIC_PATH, NN_PATH, shots)
+
+    nn_model = keras.models.load_model(NN_PATH)
+    print(nn_model.summary())
 

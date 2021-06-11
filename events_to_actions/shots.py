@@ -1,5 +1,4 @@
 import pandas as pd
-import numpy as np
 from scipy.spatial import distance
 from math import acos, degrees
 import warnings
