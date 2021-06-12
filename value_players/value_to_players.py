@@ -66,7 +66,11 @@ def get_best_ratings(all_players_df, n_players=10, minutes_played=900, goalkeepe
 
     all_players_df = all_players_df.sort_values('rating', ascending=False)
 
-    print(all_players_df.head(n_players))
+    if n_players == 'All':
+        pd.set_option('display.max_rows', None)
+        print(all_players)
+    else:
+        print(all_players_df.head(n_players))
 
 
 

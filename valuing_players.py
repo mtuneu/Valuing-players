@@ -100,10 +100,17 @@ if __name__ == "__main__":
             g = True
         else:
             g = False
-    
+
+        print("Select the number of players you want to see on screen, or All if you want to see all players. (Best values)")
+
+        n = input()
+        n = n.lower()
+        if n != 'all':
+            n = int(n)  
+          
     all_players_df = get_all_players_rating(competitions=selected, gender=gender_selection)
 
-    get_best_ratings(all_players_df, g)
+    get_best_ratings(all_players_df, g, n_players=n)
 
 
 
