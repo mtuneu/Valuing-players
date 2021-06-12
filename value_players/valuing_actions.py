@@ -1,4 +1,4 @@
-from extract_events import get_competitions, get_games
+
 import pandas as pd
 from scipy.spatial import distance
 from math import acos, degrees
@@ -80,16 +80,18 @@ def get_sequence(match_df, team_id):
                 if(row['type_id'] == 16 and row['outcome'] == 1):
                     if row['team_id'] == team_id:
                         team_1_goals+=1
+                        team1_xG = match_df.loc[index, 'score_prob'] + team1_xG
                         match_df.at[index, 'attacking_value'] = 1 - match_df.loc[index, 'score_prob']
                         match_df.at[index, 'deffensive_value'] = 1 - match_df.loc[index, 'concede_prob']
                     else:
                         team_2_goals+=1
+                        team2_xG = match_df.at[index, 'concede_prob'] + team2_xG
                         match_df.at[index, 'attacking_value'] = 1 - match_df.loc[index, 'concede_prob']
                         match_df.at[index, 'deffensive_value'] = 1 - match_df.loc[index, 'score_prob']
                 else:    
                     if row['team_id'] == team_id:
                         if row['type_id'] == 16:
-                            team2_xG = match_df.loc[index, 'score_prob'] + team1_xG
+                            team1_xG = match_df.loc[index, 'score_prob'] + team1_xG
                         match_df.at[index, 'attacking_value'] = ((return_score_probabilites(team_id, match_df.loc[index + 1]) - match_df.at[index , 'score_prob']) + (return_score_probabilites(team_id, match_df.loc[index+2]) - return_score_probabilites(team_id, match_df.loc[index + 1]))) / 2
                         match_df.at[index, 'deffensive_value'] = - (((return_concede_probabilites(team_id, match_df.loc[index + 1]) - match_df.at[index , 'concede_prob']) + (return_concede_probabilites(team_id, match_df.loc[index + 2]) - return_concede_probabilites(team_id, match_df.loc[index + 1]))) / 2)
                     else:
@@ -101,10 +103,12 @@ def get_sequence(match_df, team_id):
                 if(row['type_id'] == 16 and row['outcome'] == 1):
                     if row['team_id'] == team_id:
                         team_1_goals+=1
+                        team1_xG = match_df.loc[index, 'score_prob'] + team1_xG
                         match_df.at[index, 'attacking_value'] = 1 - match_df.loc[index, 'score_prob']
                         match_df.at[index, 'deffensive_value'] = 1 - match_df.loc[index, 'concede_prob']
                     else:
                         team_2_goals+=1
+                        team2_xG = match_df.at[index, 'concede_prob'] + team2_xG
                         match_df.at[index, 'attacking_value'] = 1 - match_df.loc[index, 'concede_prob']
                         match_df.at[index, 'deffensive_value'] = 1 - match_df.loc[index, 'score_prob']
                 else:
@@ -122,10 +126,12 @@ def get_sequence(match_df, team_id):
                 if(row['type_id'] == 16 and row['outcome'] == 1):
                     if row['team_id'] == team_id:
                         team_1_goals+=1
+                        team1_xG = match_df.loc[index, 'score_prob'] + team1_xG
                         match_df.at[index, 'attacking_value'] = 1 - match_df.loc[index, 'score_prob']
                         match_df.at[index, 'deffensive_value'] = 1 - match_df.loc[index, 'concede_prob']
                     else:
                         team_2_goals+=1
+                        team2_xG = match_df.at[index, 'concede_prob'] + team2_xG
                         match_df.at[index, 'attacking_value'] = 1 - match_df.loc[index, 'concede_prob']
                         match_df.at[index, 'deffensive_value'] = 1 - match_df.loc[index, 'score_prob']
                 else:

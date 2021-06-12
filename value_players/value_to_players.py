@@ -52,10 +52,13 @@ def get_rating(players_values, players_df):
 
     return players_values
 
-def get_best_ratings(all_players_df, n_players=10, minutes_played=900):
+def get_best_ratings(all_players_df, n_players=10, minutes_played=900, goalkeepers):
 
     mask = all_players_df['minutes_played'] > minutes_played
-    mask2 = all_players_df['player_position'] != 'Goalkeeper'
+    if goalkeepers:
+        mask2 = all_players_df['player_position'] == 'Goalkeeper'
+    else:
+        mask2 = all_players_df['player_position'] != 'Goalkeeper'
 
     all_players_df = all_players_df[mask]
     all_players_df = all_players_df[mask2]

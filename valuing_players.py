@@ -75,8 +75,6 @@ if __name__ == "__main__":
         if selected in competitions_df or selected == "All":
             valid = True
 
-        print(valid)
-
         gender_selection = 'male'
         
         if selected == "All":
@@ -90,10 +88,22 @@ if __name__ == "__main__":
 
             if gender_selection != ("male" or "female"):
                 valid = False
+        
+        print("Select goalkeepers or field players:")
+        print("1. Goalkeepers")
+        print("2. Field players")
+
+        p = input()
+
+        p = p.lower()
+        if(p == 'goalkeepers'):
+            g = True
+        else:
+            g = False
     
     all_players_df = get_all_players_rating(competitions=selected, gender=gender_selection)
 
-    get_best_ratings(all_players_df)
+    get_best_ratings(all_players_df, g)
 
 
 
