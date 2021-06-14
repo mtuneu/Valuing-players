@@ -62,7 +62,7 @@ def convert_to_actions(events):
             outcome, type_id, type_name = normalize_pass(row[row['type_name']])
             actions.loc[index, 'outcome'] = outcome
             actions.loc[index, 'type_id'] = type_id
-            actions.loc[index, 'type_name'] 
+            actions.loc[index, 'type_name'] = type_name
         elif row['type_id'] == 4:
             #Duel
             actions.loc[index, 'type_name'] = "Tackle"

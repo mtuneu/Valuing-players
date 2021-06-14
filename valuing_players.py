@@ -1,7 +1,6 @@
 from value_players.value_to_players import get_best_ratings, get_values, all_players_value
 from events_extraction.extract_events import get_competitions, get_games
 from events_extraction import extract_information as ei
-import numpy as np
 import pandas as pd
 
 
