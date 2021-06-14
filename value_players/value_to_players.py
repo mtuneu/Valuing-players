@@ -52,7 +52,7 @@ def get_rating(players_values, players_df):
 
     return players_values
 
-def get_best_ratings(all_players_df, n_players=10, minutes_played=900, goalkeepers):
+def get_best_ratings(all_players_df, goalkeepers, n_players=10, minutes_played=900):
 
     mask = all_players_df['minutes_played'] > minutes_played
     if goalkeepers:
@@ -68,7 +68,7 @@ def get_best_ratings(all_players_df, n_players=10, minutes_played=900, goalkeepe
 
     if n_players == 'All':
         pd.set_option('display.max_rows', None)
-        print(all_players)
+        print(all_players_df)
     else:
         print(all_players_df.head(n_players))
 
