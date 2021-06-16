@@ -4,9 +4,9 @@ Aquest repositori conté els fitxers necessaris per a obtenir els ratings de tot
 en el següent enllaç: https://github.com/statsbomb/open-data
 
 El projecte s'estructura en tres mòduls diferents i que s'executen independentment per acabar obtenint el rating dels jugadors:
-* data_extraction
-* action_values
-* valuing_players
+* [data_extraction](#data_extraction)
+* [action_values](#action_values)
+* [valuing_players](#valuing_players)
 
 # Data_extraction
 
