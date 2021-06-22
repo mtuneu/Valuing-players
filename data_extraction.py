@@ -1,5 +1,5 @@
 from events_extraction import extract_events
-from events_to_actions import events_to_actions
+from events_to_actions import events_to_actions as to_actions
 import argparse
 from events_to_actions import shots
 import pandas as pd

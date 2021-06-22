@@ -85,9 +85,9 @@ if __name__ == "__main__":
 
             gender_selection = gender_selection.lower()
 
-            if gender_selection != ("male" or "female"):
+            if gender_selection != "male" and gender_selection != "female":
                 valid = False
-        
+
         print("Select goalkeepers or field players:")
         print("1. Goalkeepers")
         print("2. Field players")
