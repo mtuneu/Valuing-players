@@ -114,3 +114,9 @@ dmypy.json
 .pyre/
 
 data/
+dataframes/
+*.pkl
+*.pkl
+dataframes/9928.pkl
+dataframes/9924.pkl
+dataframes/9912.pkl

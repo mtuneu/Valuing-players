@@ -1,22 +1,10 @@
-import pandas as pd
-import extract_events
-import numpy as np
 import os
 os.environ['CUDA_VISIBLE_DEVICES'] = '0'
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
-from os import listdir
-from os.path import isfile, join
-import matplotlib.pyplot as plt
-
-from kerastuner.tuners import RandomSearch
 from tensorflow import keras
-from tensorflow.keras import datasets, layers, models
-from expected_goals import read_actions
+from tensorflow.keras import layers
+from xg_models.expected_goals import read_actions
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import roc_curve, auc ,roc_auc_score, r2_score, mean_squared_error
-
-
-
 
 
 def build_model(hp):
