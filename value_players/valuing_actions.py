@@ -1,11 +1,12 @@
-
 import pandas as pd
 from scipy.spatial import distance
 from math import acos, degrees
 
 
 def calculate_scoring_probabilities(match_df, team_id,xg_model):
-
+    """
+    Returns the scoring probabilities for a team for all the events from an specific match
+    """
     columns = ['distance', 'angle', 'prev_type_id', 'body_part', 'situation']
     o_goal = (0, 40)
 
@@ -30,6 +31,9 @@ def calculate_scoring_probabilities(match_df, team_id,xg_model):
     return proba_df
 
 def calculate_conceding_probabilities(match_df, team_id, xg_model):
+    """
+    Returns the conceding probabilities for a team for all the actions from an specific match
+    """
     columns = ['distance', 'angle', 'prev_type_id', 'body_part', 'situation']
 
     o_goal = (0, 40)
@@ -53,12 +57,18 @@ def calculate_conceding_probabilities(match_df, team_id, xg_model):
     return proba_df
 
 def return_score_probabilites(team_id, row):
+    """
+    Returns the score probabilities for an specific action
+    """
     if row['team_id'] == team_id:
         return row['score_prob']
     else:
         return row['concede_prob']
 
 def return_concede_probabilites(team_id, row):
+    """
+    Returns the conceding probabilities for an specific action
+    """
     if row['team_id'] == team_id:
         return row['concede_prob']
     else:
@@ -67,7 +77,9 @@ def return_concede_probabilites(team_id, row):
 
 
 def get_sequence(match_df, team_id):
-
+    """
+    Returns a dataframe with the attacking and deffensive value for all the actions from an specific match
+    """
     match_df['attacking_value'] = 0.0
     match_df['deffensive_value'] = 0.0
     team1_xG = 0
@@ -155,7 +167,9 @@ def get_sequence(match_df, team_id):
     return match_df
 
 def get_total_value(values_df):
-
+    """
+    Returns a dataframe with the total value for all the actions
+    """
     values_df['total_value'] = values_df['attacking_value'] + values_df['deffensive_value']
 
     return values_df

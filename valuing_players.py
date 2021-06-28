@@ -5,6 +5,9 @@ import pandas as pd
 
 
 def get_all_players_rating(competitions='All', gender='male'):
+    """
+    Returns a dataframe with the ratings for all the players in the StatsBomb dataset
+    """
     competitions_df = get_competitions()
 
     path = 'ratings/all'

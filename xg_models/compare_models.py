@@ -6,7 +6,7 @@ from expected_goals import read_actions
 from sklearn.model_selection import train_test_split
 import sklearn.metrics as metrics
 import matplotlib.pyplot as plt
-from joblib import dump, load
+from joblib import load
 from tensorflow import keras
 import warnings
 import matplotlib.pyplot as plt

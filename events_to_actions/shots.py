@@ -6,7 +6,9 @@ import warnings
 warnings.filterwarnings('ignore')
 
 def get_shots(events_df):
-    
+    """
+    Returns a dataframe with the actions form with all the shots.
+    """
     events_df = events_df[events_df.type_id != 42]
     events_df = events_df.reset_index(drop=True)
     shots_df = events_df[events_df['type_id'] == 16]

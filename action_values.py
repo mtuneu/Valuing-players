@@ -6,11 +6,17 @@ from tensorflow import keras
 import pandas as pd
 
 def load_match_events(match_id):
+    """
+    Loads all the actions from a pickle file and returns a dataframe
+    """
     match_df = pd.read_pickle('dataframes/'+str(match_id)+'.pkl')
 
     return match_df
 
 def get_all_values(xg_model):
+    """
+    Get all the values from all the matches in the StatsBomb dataset
+    """
     competitions_df = get_competitions()
 
     for index, row in competitions_df.iterrows():
@@ -25,6 +31,9 @@ def get_all_values(xg_model):
             get_one_match_values(xg_model, match_id)
 
 def get_one_match_values(xg_model, match_id):
+    """
+    Get all the values from an specific match
+    """
     match_df = load_match_events(match_id)
 
     team_id = match_df.loc[0, 'team_id']

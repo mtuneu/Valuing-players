@@ -125,6 +125,9 @@ def convert_to_actions(events):
 
 
 def normalize_50_50(action_dict):
+    """
+    Simplifies 50/50 actions
+    """
     if 'outcome' in action_dict:
         if action_dict['outcome']['id'] == 108 or action_dict['outcome']['id'] == 147:
             return 1
@@ -134,6 +137,9 @@ def normalize_50_50(action_dict):
         return 0
 
 def normalize_pass(action_dict):
+    """
+    Simplifies pass actions
+    """
     if 'outcome' in action_dict:
         outcome = 0
     else:
@@ -162,6 +168,9 @@ def normalize_pass(action_dict):
     return outcome, type_id, type_name
 
 def normalize_shot(action_dict):
+    """
+    Simplifies shot actions
+    """
     if 'outcome' in action_dict:
         if action_dict['outcome']['id'] == 97:
             outcome = 1
@@ -195,12 +204,18 @@ def normalize_shot(action_dict):
 
 
 def normalize_interception(action_dict):
+    """
+    Simplifies interception actions
+    """
     if action_dict['outcome'] == 1 or action_dict['outcome'] == 13 or action_dict['outcome'] == 14:
         return 0
     else:
         return 1
 
 def normalize_duel(action_dict):
+    """
+    Simplifies duel actions
+    """
     if 'outcome' in action_dict:
         if action_dict['outcome']['id'] == 1 or action_dict['outcome']['id'] == 13 or action_dict['outcome']['id'] == 14:
             return 0
@@ -208,12 +223,18 @@ def normalize_duel(action_dict):
         return 1
 
 def normalize_dribble(action_dict):
+    """
+    Simplifies dribble actions
+    """
     if action_dict['outcome']['id'] == 9:
         return 0
     else:
         return 1
 
 def normalize_goalkeeper(action_dict):
+    """
+    Simplifies goalkeeper actions
+    """
     if action_dict['type']['id'] != 26 or action_dict['type']['id'] != 28 or action_dict['type']['id'] != 32:
         if 'outcome' in action_dict:
             if action_dict['outcome']['id'] == 50 or action_dict['outcome']['id'] == 55:

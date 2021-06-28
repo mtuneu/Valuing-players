@@ -5,6 +5,9 @@ import json
 warnings.simplefilter(action='ignore', category=pd.errors.PerformanceWarning)
 
 def get_simple_events(match_id):
+    """
+    Returns all the original StatsBomb events from an specific match
+    """
     with open('./data/events/' + str(match_id) + '.json', encoding='utf-8') as json_file:
         data = json.load(json_file)
     events_df = pd.DataFrame(data)
@@ -12,6 +15,9 @@ def get_simple_events(match_id):
     return events_df
 
 def starting_lineup(match_id):
+    """
+    Returns the starting lineup of both teams from an specific match
+    """
     with open('./data/lineups/'+str(match_id)+'.json', encoding='utf-8') as json_file:
         data = json.load(json_file)
     
@@ -20,6 +26,9 @@ def starting_lineup(match_id):
     return lineup_df
 
 def get_players(match_id):
+    """
+    Returns all players starting from both team from an specific match
+    """
     player_list = []
     for index, row in starting_lineup(match_id).iterrows():
         for p in row['lineup']:
@@ -31,6 +40,9 @@ def get_players(match_id):
 
 
 def player_games(events_df, first_players_df):
+    """
+    Returns a dataframe with all the player games
+    """
     max_minutes = max(events_df[events_df['type'] == {'id':34 , 'name': 'Half End'}].minute)
     
     players = []
